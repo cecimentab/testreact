@@ -1,35 +1,38 @@
 import './App.css';
-// import { useReducer } from 'react';
-import { useRef } from 'react';
+import {useState} from 'react';
+
+function useInput(iniValue) {
+  const [value, setValue] = useState(iniValue);
+  return [
+    {
+      value,
+      onChange: (e) => setValue(e.target.value)
+    },
+    () => setValue(iniValue)
+  ];
+}
 
 function App() {
-  // const [checked, s etCheck] = useReducer((checked) => !checked, false);
-  const txtTitle = useRef();
-  const hexColor = useRef();
+  const [titleProps, resetTitle] = useInput("");
+  const [colorProps, resetColor] = useInput("#000000");
 
   const submit = (e) => {
     e.preventDefault();
-    const title = txtTitle.current.value;
-    const color = hexColor.current.value;
-    console.log(`${title}, ${color}`)
+    console.log(`${titleProps.value}, ${colorProps.value}`)
+    resetTitle();
+    resetColor();
   }
   return (
-    // **useReducer**
-    // <div className="App">
-    //   <header className="App-header">
-    //     <input type="checkbox" value={checked} onChange={setCheck} />
-    //     <label>{checked ? "checked" : "not checked"}</label>
-    //   </header>
-    // </div>
-
-    //**useRef */
     <form onSubmit={submit}>
       <input
-        ref={txtTitle}
+        {...titleProps}
         type = "text"
         placeholder="color title.."
       />
-      <input ref={hexColor} type="color" />
+      <input 
+        {...colorProps}
+        type="color" 
+      />
       <button>ADD</button>
     </form>
   );
